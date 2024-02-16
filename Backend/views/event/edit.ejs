@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/js/Event.js"></script>
+    <link rel="icon" href="/images/4.png" />
+    <title>Editar Evento</title>
+  </head>
+  <body
+    onload="loadCheckbox('<%= event.priceInfantil %>', '<%= event.priceJuvenil %>', '<%= event.priceAdulto %>', '<%= event.priceSenior %>')"
+  >
+    <div class="container">
+      <div
+        class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 overflow-hidden pb-5"
+        style="width: auto; height: auto; border-radius: 20px"
+      >
+        <div class="my-3 py-3">
+          <h2 class="display-5 text-center">Editar Evento</h2>
+        </div>
+        <form
+          action="/events/update/<%= event._id%>"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div
+            class="bg-body shadow-sm mx-auto"
+            style="width: auto; height: auto; border-radius: 20px"
+          >
+            <br />
+            <p style="margin-left: 1cm; margin-right: 1cm">
+              <strong>Nome:</strong>
+              <input
+                required
+                name="name"
+                value="<%= event.name %>"
+                class="form-control"
+                type="text"
+                placeholder="Nome do evento"
+                aria-label="default input example"
+              />
+            </p>
+            <p style="margin-left: 1cm; margin-right: 1cm">
+              <strong>Descrição:</strong>
+              <input
+                required
+                name="description"
+                value="<%= event.description %>"
+                class="form-control"
+                type="text"
+                placeholder="Descrição do evento"
+                aria-label="default input example"
+              />
+            </p>
+            <p style="margin-left: 1cm; margin-right: 1cm">
+              <strong>Local:</strong>
+              <select name="local_id" id="local_id">
+                <option value="<%= event.local_id %>">Local atual</option>
+                <% for (let i = 0; i < locals.length; i++) { %>
+                <option value="<%= locals[i]._id %>">
+                  <%= locals[i].name %>
+                </option>
+                <% } %>
+              </select>
+            </p>
+            <p style="margin-left: 1cm; margin-right: 1cm">
+              <strong>Horário de início:</strong>
+              <input
+                required
+                id="startDateTime"
+                name="startDateTime"
+                value="<%= event.startDateTime.toISOString().substr(0, 19) %>"
+                class="form-control"
+                type="datetime-local"
+                placeholder="Horário do evento"
+                aria-label="default input example"
+                min="<%= new Date().toISOString().substr(0,16)%>"
+                onchange="validateFirstDate()"
+              />
+            </p>
+            <p style="margin-left: 1cm; margin-right: 1cm">
+              <strong>Horário de fim:</strong>
+              <input
+                required
+                id="endDateTime"
+                name="endDateTime"
+                value="<%= event.endDateTime.toISOString().substr(0, 19) %>"
+                class="form-control"
+                type="datetime-local"
+                placeholder="Horário do evento"
+                aria-label="default input example"
+                min="<%= new Date().toISOString().substr(0,16)%>"
+                onchange="validateEndDate()"
+              />
+            </p>
+            <div class="row">
+              <p style="margin-left: 1cm; margin-right: 1cm">
+                <br />
+              </p>
+              <div class="col-md-5">
+                <strong style="margin-left: 1cm; margin-right: 1cm"
+                  >Tabela de preços:</strong
+                >
+                <table
+                  class="table"
+                  style="margin-left: 1cm; width: auto; height: auto"
+                >
+                  <thead>
+                    <tr>
+                      <th>Selecionar</th>
+                      <th>Faixa etária</th>
+                      <th>Preço</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                    <tr>
+                      <td style="text-align: center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="on"
+                          id="checkTicketInfantil"
+                          onclick="checkTicketInfantilFunction()"
+                        />
+                      </td>
+                      <td>Infantil</td>
+                      <td>
+                        <div id="priceInfantil1" style="display: none">
+                          €
+                          <input
+                            id="priceInfantil"
+                            name="priceInfantil"
+                            value="<%= event.priceInfantil %>"
+                            type="number"
+                            min="0.00"
+                            step="0.01"
+                          />
+                        </div>
+                        <div id="priceInfantil2">Sem Bilhetes</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="on"
+                          id="checkTicketJuvenil"
+                          onclick="checkTicketJuvenilFunction()"
+                        />
+                      </td>
+                      <td>Juvenil</td>
+                      <td>
+                        <div id="priceJuvenil1" style="display: none">
+                          €
+                          <input
+                            id="priceJuvenil"
+                            name="priceJuvenil"
+                            value="<%= event.priceJuvenil %>"
+                            type="number"
+                            min="0.00"
+                            step="0.01"
+                          />
+                        </div>
+                        <div id="priceJuvenil2">Sem Bilhetes</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="on"
+                          id="checkTicketAdult"
+                          onclick="checkTicketAdultFunction()"
+                        />
+                      </td>
+                      <td>Adulto</td>
+                      <td>
+                        <div id="priceAdult1" style="display: none">
+                          €
+                          <input
+                            id="priceAdulto"
+                            name="priceAdulto"
+                            value="<%= event.priceAdulto %>"
+                            type="number"
+                            min="0.00"
+                            step="0.01"
+                          />
+                        </div>
+                        <div id="priceAdult2">Sem Bilhetes</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: center">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="on"
+                          id="checkTicketSenior"
+                          onclick="checkTicketSeniorFunction()"
+                        />
+                      </td>
+                      <td>Sênior</td>
+                      <td>
+                        <div id="priceSenior1" style="display: none">
+                          €
+                          <input
+                            id="priceSenior"
+                            name="priceSenior"
+                            value="<%= event.priceSenior %>"
+                            type="number"
+                            min="0.00"
+                            step="0.01"
+                          />
+                        </div>
+                        <div id="priceSenior2">Sem Bilhetes</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>Máximo de bilhetes: </strong>
+                  <input
+                    required
+                    name="maxTickets"
+                    value="<%= event.maxTickets %>"
+                    type="number"
+                    min="0"
+                  />
+                </p>
+              </div>
+              <div class="col-md-1"></div>
+              <div class="col-md-6">
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <img
+                    id="eventImage"
+                    src="/images/<%= event.image %>"
+                    alt="Imagem do evento"
+                    class="img-fluid mb-4"
+                    style="width: auto; height: auto; border-radius: 20px"
+                  />
+                  <br />
+                  <strong>Nova imagem: </strong>
+                  <input
+                    type="file"
+                    id="image_input"
+                    name="file"
+                    value="<%= event.image %>"
+                  />
+                </p>
+              </div>
+              <br />
+              <p style="margin-left: 1cm; margin-right: 1cm">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onclick="validateEvento()"
+                >
+                  Atualizar
+                </button>
+              </p>
+              <br />
+            </div>
+          </div>
+          <br />
+        </form>
+        <br />
+        <a href="/events" class="btn btn-primary">Voltar</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="icon" href="/images/3.png">
+    <title>Descrição do Local</title>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 overflow-hidden pb-5"
+        style="width: auto; height: auto; border-radius: 20px"
+      >
+        <div class="my-3 py-3">
+          <h2 class="display-5 text-center">Informação do Local</h2>
+        </div>
+        <div
+          class="bg-body shadow-sm mx-auto pb-5"
+          style="width: auto; height: auto; border-radius: 20px"
+        >
+          <br />
+          <div class="row">
+            <div class="col-md-5">
+              <% if (local.name != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Nome:</strong> <%= local.name %>
+              </p>
+              <% } %> <% if (local.lat != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Latitude:</strong> <%= local.lat %>
+              </p>
+              <% } %> <% if (local.lon != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Longitude:</strong> <%= local.lon %>
+              </p>
+              <% } %> <% if (local.street != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Rua:</strong> <%= local.street %>
+              </p>
+              <% } %> <% if (local.county != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Cidade:</strong> <%= local.county %>
+              </p>
+              <% } %> <% if (local.postcode != null) { %>
+              <p style="margin-left: 1cm">
+                <strong>Código Postal:</strong> <%= local.postcode %>
+              </p>
+              <% } %>
+              <br />
+            </div>
+            <div class="col-md-7">
+              <% if(local.image !== null) { %>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <img
+                    src="/images/<%=local.image%>"
+                    alt="Imagem do local"
+                    class="img-fluid mb-4"
+                    style="
+                      width: auto;
+                      height: auto;
+                      border-radius: 20px;
+                      position: relative;
+                    "
+                  />
+                </p>
+                <% } else { %>
+                  <p style="margin-left: 1cm; margin-right: 1cm">
+                    <img
+                      src="/images/EventoSemImagem.png"
+                      alt="Imagem do local"
+                      class="img-fluid mb-4"
+                      style="
+                        width: auto;
+                        height: auto;
+                        border-radius: 20px;
+                        position: relative;
+                      "
+                    />
+                  </p>
+                  <% } %>
+            </div>
+          </div> <!-- width=600&height=400 -->
+          <p style="margin: 1cm">
+            <strong>Mapa do local</strong>
+            <br />
+            <p style=" width: 1100; height: 400; margin-left: 1cm; margin-right: 1cm">
+              <div style="position: relative; padding-bottom: 36.36%; height: 0; margin-left: 1cm; margin-right: 1cm;">
+                <img
+                  src="https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=1100&height=400&center=lonlat:<%= local.lon %>,<%= local.lat %>&zoom=16&marker=lonlat:<%= local.lon %>,<%= local.lat %>;color:%23ff0000;size:medium&apiKey=06bdcae9cfbb4e0fae58f0da11c5df7e"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" alt="Mapa do local"
+                />
+              </div> 
+            </p>
+          </p>
+        </div>
+        <br />
+        <a href="javascript:history.back()" class="btn btn-primary">Voltar</a>
+        <a href="/locals" class="btn btn-primary">Lista de Locais</a>
+      </div>
+    </div>
+  </body>
+</html>

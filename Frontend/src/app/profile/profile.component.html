@@ -1,0 +1,124 @@
+<div *ngIf="user" class="justify-content-center align-items-center">
+  <section style="background-color: #eee">
+    <div class="container py-5">
+      <div class="back-to-shop">
+        <a href="/events"
+          >&leftarrow;<span class="text-muted">Retroceder</span></a
+        >
+      </div>
+      <br /><br />
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img
+                src="https://cdn.onlinewebfonts.com/svg/img_568656.png"
+                alt="avatar"
+                class="rounded-circle img-fluid"
+                style="width: 150px"
+              />
+              <h5 class="my-3">{{ user.name }}</h5>
+              <p class="text-muted mb-1">Pontos: {{ user.points }}pts</p>
+              <br />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Nome Completo</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.name }}</p>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.email }}</p>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Contacto</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.contact }}</p>
+                </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ user.address }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div class="card mb-4">
+            <div *ngFor="let ticket of tickets">
+              <div
+                class="row justify-content-left"
+                style="
+                  margin-left: 10px;
+                  margin-top: 10px;
+                  margin-bottom: 2px;
+                  justify-content: center;
+                "
+              >
+                <div class="col-md-11">
+                  <div class="card shadow-1 border rounded-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-6 my-auto">
+                          <app-event-name
+                            IdEvento="{{ ticket.event_id }}"
+                          ></app-event-name>
+                          <span *ngIf="ticket.countInfantil > 0">
+                            Bilhete Infantil || <strong>Qtd: </strong
+                            >{{ ticket.countInfantil }}
+                            <br />
+                          </span>
+                          <span *ngIf="ticket.countJuvenil > 0">
+                            Bilhete Juvenil || <strong>Qtd: </strong>
+                            {{ ticket.countJuvenil }}
+                            <br />
+                          </span>
+                          <span *ngIf="ticket.countAdulto > 0">
+                            Bilhete Adulto || <strong>Qtd: </strong>
+                            {{ ticket.countAdulto }}
+                            <br />
+                          </span>
+                          <span *ngIf="ticket.countSenior > 0">
+                            Bilhete Senior || <strong>Qtd: </strong
+                            >{{ ticket.countSenior }}
+                            <br />
+                          </span>
+                        </div>
+                        <div class="col-md-6 my-auto">
+                          <div class="d-flex flex-row justify-content-end">
+                            <h4>{{ ticket.totalPrice }}&euro;</h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

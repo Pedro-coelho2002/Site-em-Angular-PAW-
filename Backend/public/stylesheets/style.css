@@ -1,0 +1,53 @@
+body {
+  background-color: #00b7ff !important;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00b7ff;
+}
+button a {
+  text-decoration: none; /* remove o sublinhado */
+  color: inherit; /* usa a cor padrão do texto do elemento pai (normalmente preto) */
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+
+  .btn-primary {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    margin-right: 2cm;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  body {
+    background-color: #00b7ff;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body {
+    font-size: 20px;
+  }
+}
+
+.autocomplete-container {
+  /*the container must be positioned relative:*/
+  position: relative;
+}
+
+.autocomplete-container input {
+  width: calc(100% - 43px);
+  outline: none;
+  
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  padding-right: 31px;
+  font-size: 16px;
+}

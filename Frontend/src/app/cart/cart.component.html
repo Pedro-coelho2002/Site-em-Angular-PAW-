@@ -1,0 +1,10 @@
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <button
+    *ngIf="isAuthenticated()"
+    class="btn btn-light me-md-2"
+    [routerLink]="'/checkout'"
+  >
+    Checkout
+  </button>
+  <button (click)="clearCart()" class="btn btn-danger">Remover todos</button>
+</div>

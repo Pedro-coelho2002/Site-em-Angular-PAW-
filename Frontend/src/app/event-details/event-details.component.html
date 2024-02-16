@@ -1,0 +1,140 @@
+<section class="py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="back-to-shop">
+      <a href="/events"
+        >&leftarrow;<span class="text-muted">Retroceder</span></a
+      >
+    </div>
+    <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="col-md-6">
+        <div class="card-img-top mb-5 mb-md-0" *ngIf="event">
+          <app-event-image [eventId]="event._id"></app-event-image>
+        </div>
+        <!-- imagem 600x700 -->
+      </div>
+
+      <div class="col-md-6" *ngIf="event">
+        <h1 class="display-5 fw-bolder">
+          {{ event.name }}
+          <span *ngIf="!isTicketsAvailable()" style="color: rgb(193, 1, 1)"
+            >(Esgotado)</span
+          >
+        </h1>
+        <div class="fs-5">
+          {{ event.description }}
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Início:</strong>
+            <app-date-time [dateTime]="event.startDateTime"></app-date-time>
+          </div>
+          <div class="col-md-6">
+            <strong>Fim:</strong
+            ><app-date-time [dateTime]="event.endDateTime"></app-date-time>
+          </div>
+        </div>
+        <br />
+        <strong>Tabela de preços</strong>
+        <table class="table table-bordered" style="width: auto">
+          <thead>
+            <tr>
+              <th>Faixa etária</th>
+              <th>Preço</th>
+              <th>Número de bilhetes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="event.priceInfantil != null">
+              <td>Infantil</td>
+              <td>{{ event.priceInfantil }} €</td>
+              <td>
+                <input
+                  (click)="validateInput()"
+                  type="number"
+                  max="{{ ticketsAvailableCount }}"
+                  min="0"
+                  [(ngModel)]="countInfantil"
+                  placeholder="0"
+                />
+              </td>
+            </tr>
+            <tr *ngIf="event.priceJuvenil != null">
+              <td>Juvenil</td>
+              <td>{{ event.priceJuvenil }} €</td>
+              <td>
+                <input
+                  (click)="validateInput()"
+                  type="number"
+                  max="{{ ticketsAvailableCount }}"
+                  min="0"
+                  [(ngModel)]="countJuvenil"
+                  placeholder="0"
+                />
+              </td>
+            </tr>
+            <tr *ngIf="event.priceAdulto != null">
+              <td>Adulto</td>
+              <td>{{ event.priceAdulto }} €</td>
+              <td>
+                <input
+                  (click)="validateInput()"
+                  type="number"
+                  max="{{ ticketsAvailableCount }}"
+                  min="0"
+                  [(ngModel)]="countAdulto"
+                  placeholder="0"
+                />
+              </td>
+            </tr>
+            <tr *ngIf="event.priceSenior != null">
+              <td>Sénior</td>
+              <td>{{ event.priceSenior }} €</td>
+              <td>
+                <input
+                  (click)="validateInput()"
+                  type="number"
+                  max="{{ ticketsAvailableCount }}"
+                  min="0"
+                  [(ngModel)]="countSenior"
+                  placeholder="0"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="ticketsAvailable">
+          <strong>Disponíveis:</strong>
+          {{ ticketsAvailableCount }}
+          Bilhete(s)
+        </p>
+
+        <button
+          class="btn btn-outline-dark flex-shrink-0"
+          (click)="getLocal(event.local_id)"
+        >
+          <i class="bi bi-geo-alt-fill me-1"></i>Local
+        </button>
+        <br /><br /><br />
+        <div class="d-flex">
+          <button
+            *ngIf="isTicketsAvailable()"
+            class="btn btn-outline-dark flex-shrink-0"
+            (click)="addToCart()"
+          >
+            <i class="bi-cart-fill me-1"></i>
+            Comprar
+          </button>
+        </div>
+        <br />
+        <div
+          *ngIf="showAddToCartMessage"
+          class="alert alert-success"
+          role="alert"
+        >
+          Adicionado ao carrinho!
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

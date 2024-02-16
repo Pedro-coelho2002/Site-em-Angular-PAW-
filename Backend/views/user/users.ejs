@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="icon" href="/images/2.png" />
+    <title>Lista de funcionarios</title>
+  </head>
+  <body style="background-color: white !important">
+    <%- include ../header.ejs %>
+    <br />
+    <h2 class="pb-2 border-bottom">
+      Lista de Funcionários
+      <a href="/user/create" class="btn btn-primary" style="float: right"
+        >Adicionar Funcionário</a
+      >
+    </h2>
+    <br />
+    <table class="table">
+      <thead class="table-dark">
+        <tr>
+          <th>Nome</th>
+          <th>Cargo</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < users.length; i++) { %>
+        <tr>
+          <td><%= users[i].name %></td>
+          <td>
+            <% if ( users[i].cargo === 'ADMIN') { %>
+            <p>Administrador</p>
+            <% } else { %>
+            <p>Funcionário</p>
+            <% } %>
+          </td>
+          <td>
+            <a href="/user/show/<%= users[i]._id %>" class="btn btn-info"
+              >Detalhes</a
+            >
+          </td>
+          <td>
+            <a href="/user/edit/<%= users[i]._id%>" class="btn btn-success"
+              >Editar</a
+            >
+          </td>
+          <td>
+            <form action="user/delete/<%= users[i]._id%>" method="post">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+    <a href="/" class="btn btn-primary">Voltar</a>
+  </body>
+</html>

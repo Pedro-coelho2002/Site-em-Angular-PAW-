@@ -1,0 +1,83 @@
+<br /><br /><br />
+<div class="card" *ngIf="user">
+  <div class="row">
+    <div class="col-md-8 cart">
+      <div class="title">
+        <div class="row">
+          <div class="col">
+            <h4><b>Carrinho</b></h4>
+          </div>
+          <div class="col align-self-center text-right text-muted">
+            {{ cart.length }} tickets
+          </div>
+        </div>
+      </div>
+      <div *ngFor="let item of cart">
+        <div
+          class="row"
+          style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
+        >
+          <div class="col">{{ item.eventName }}</div>
+          <div class="col">Bilhete {{ item.ticketType }}</div>
+          <div class="col">
+            <input
+              type="number"
+              class="quantity-input"
+              min="1"
+              [(ngModel)]="item.quantity"
+              (change)="updateCart(item)"
+            />
+          </div>
+
+          <div class="col">{{ item.price }} &euro;</div>
+        </div>
+      </div>
+      <div class="back-to-shop">
+        <a href="/events">&leftarrow;</a
+        ><span class="text-muted">Retroceder</span>
+      </div>
+    </div>
+    <div class="col-md-4 summary">
+      <div>
+        <h5>
+          <b>Pontos: {{ user.points }}pts</b>
+        </h5>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col" style="padding-left: 0">Preço Tickets</div>
+        <div class="col text-right">{{ ticketsPrice }} &euro;</div>
+      </div>
+      <br />
+      <div
+        class="row"
+        style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
+      >
+        <div class="col">Descontos</div>
+        <select
+          style="border-radius: 10px"
+          (change)="onDiscountSelected($event)"
+        >
+          <option
+            *ngFor="let discount of availableDiscounts"
+            [value]="discount.value"
+          >
+            {{ discount.label }}
+          </option>
+        </select>
+      </div>
+
+      <div
+        class="row"
+        style="border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 2vh 0"
+      >
+        <div class="col">PREÇO TOTAL</div>
+        <div class="col text-right">{{ finalPrice }} &euro;</div>
+      </div>
+      <button (click)="onCheckout()" class="btn" style="border-radius: 6px">
+        CHECKOUT
+      </button>
+    </div>
+  </div>
+</div>
+<br /><br /><br />

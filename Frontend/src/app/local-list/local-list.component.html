@@ -1,0 +1,37 @@
+<section class="light">
+  <div class="container py-2">
+    <div class="h1 text-center text-dark" id="pageHeaderTitle">
+      Lista de locais
+    </div>
+    <article class="postcard light blue" *ngFor="let local of locals">
+      <a class="postcard__img_link"
+        ><!-- ############ Colocar uma imagem do local ########## -->
+        <app-local-image
+          [localId]="local._id"
+          style="width: 800px; height: 350px"
+        ></app-local-image>
+        <!-- ############ Colocar uma imagem do local ############ -->
+      </a>
+      <div class="postcard__text t-dark">
+        <h1 class="postcard__title blue">
+          <a> {{ local.name }}</a>
+        </h1>
+        <div class="postcard__subtitle small">
+          <i class="bi bi-geo-fill"></i>Coordenadas: {{ local.lat }},
+          {{ local.lon }}
+        </div>
+        <div class="postcard__bar"></div>
+        <div class="postcard__preview-txt">
+          <strong>Rua: </strong>{{ local.street }} <br />
+          <strong>Cidade: </strong>{{ local.county }}<br />
+          <strong>Código Postal: </strong>{{ local.postcode }}
+        </div>
+        <ul class="postcard__tagbox">
+          <li class="tag__item" (click)="viewLocal(local._id)">
+            <i class="bi bi-search me-1"></i>Consultar
+          </li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>

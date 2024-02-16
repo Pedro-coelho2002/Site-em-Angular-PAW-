@@ -1,0 +1,132 @@
+<!-- LAYOUT -->
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button
+      type="button"
+      data-bs-target="#myCarousel"
+      data-bs-slide-to="0"
+      aria-label="Slide 1"
+      class="active"
+      aria-current="true"
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#myCarousel"
+      data-bs-slide-to="1"
+      aria-label="Slide 2"
+      class=""
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#myCarousel"
+      data-bs-slide-to="2"
+      aria-label="Slide 3"
+      class=""
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#myCarousel"
+      data-bs-slide-to="3"
+      aria-label="Slide 4"
+      class=""
+    ></button>
+  </div>
+  <div class="carousel-inner">
+    <div
+      class="carousel-item"
+      *ngFor="let event of events.slice(0, 4); let i = index"
+      [class.active]="i === 0"
+    >
+      <div style="height: auto; width: auto">
+        <app-event-image [eventId]="event._id"></app-event-image>
+      </div>
+
+      <div class="container">
+        <div class="carousel-caption text-end">
+          <h1>{{ event.name }}</h1>
+          <p>{{ event.description }}</p>
+          <p>
+            <a class="btn btn-lg btn-primary" (click)="viewEvent(event._id)"
+              >Comprar Bilhete</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#myCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#myCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!-- search bar -->
+<div class="container">
+  <div class="row height d-flex justify-content-center align-items-center">
+    <div class="col-md-6">
+      <div class="form">
+        <input
+          type="text"
+          class="form-control form-input"
+          placeholder="Pesquisar evento..."
+          [(ngModel)]="eventNameSearch"
+        />
+        <span class="left-pan"> <i class="bi bi-search me-1"></i>Procurar</span>
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <section id="gallery">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4" *ngFor="let event of filtrarEventos()">
+          <div class="card">
+            <div style="height: 306px">
+              <app-event-image [eventId]="event._id"></app-event-image>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ event.name }}</h5>
+              <p class="card-text">
+                <strong>Descrição: </strong> {{ event.description }} <br />
+              </p>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <strong>Início:</strong>
+                  <app-date-time
+                    [dateTime]="event.startDateTime"
+                  ></app-date-time>
+                </div>
+                <div class="col-md-6">
+                  <strong>Fim:</strong
+                  ><app-date-time
+                    [dateTime]="event.endDateTime"
+                  ></app-date-time>
+                </div>
+              </div>
+              <br />
+              <a (click)="viewEvent(event._id)" class="btn btn-secondary btn-sm"
+                ><i class="bi bi-search me-1"></i>Consultar</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

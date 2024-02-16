@@ -1,0 +1,54 @@
+<br />
+<h2 style="align-items: center; text-align: center">Mapa</h2>
+<div style="margin: 1cm" *ngIf="local">
+  <app-map [latitudeTmp]="local.lat" [longitudeTmp]="local.lon"></app-map>
+</div>
+
+<section class="py-5 bg-light">
+  <div class="container px-4 px-lg-5 mt-5">
+    <h2 class="fw-bolder mb-4" style="align-items: center; text-align: center">
+      Eventos associados
+    </h2>
+    <div
+      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+    >
+      <div *ngIf="events.length === 0">
+        <h4 style="align-items: center; text-align: center">Sem eventos</h4>
+        <br />
+      </div>
+      <div *ngFor="let event of events">
+        <div class="col mb-5">
+          <div class="card h-100">
+            <!-- Event image-->
+            <div style="height: 179px">
+              <app-event-image [eventId]="event._id"></app-event-image>
+            </div>
+            <div class="card-body p-4">
+              <div class="text-center">
+                <h5 class="fw-bolder">{{ event.name }}</h5>
+              </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+              <div class="text-center">
+                <a
+                  class="btn btn-outline-dark mt-auto"
+                  (click)="viewEvent(event._id)"
+                  ><i class="bi bi-search me-1"></i>Consultar</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="align-items: center; text-align: center">
+    <button type="button" class="btn btn-primary me-1" (click)="backToLocals()">
+      Lista de locais
+    </button>
+    <button type="button" class="btn btn-primary" (click)="backToEvents()">
+      Lista de Eventos
+    </button>
+  </div>
+</section>

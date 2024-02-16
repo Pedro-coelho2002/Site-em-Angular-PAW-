@@ -1,0 +1,12 @@
+body {
+    font-family: Montserrat, sans-serif;
+  }
+  .navbar-brand {
+      font-size: 24px;
+      margin-left: 10px;
+    }
+  
+  .navbar-nav .nav-item:hover {
+    background-color: rgba(180, 190, 203, 0.4);
+  }
+  

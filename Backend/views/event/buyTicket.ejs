@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="/js/Event.js"></script>
+    <script src="/js/User.js"></script>
+    <script src="/js/Popup.js"></script>
+
+    <title>Compra de bilhetes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
+  </head>
+  <body
+    onload="loadView('<%= event.startDateTime %>', '<%= event.endDateTime %>')"
+  >
+    <input
+      type="hidden"
+      name="users"
+      value="<%= JSON.stringify(users) %>"
+      id="users"
+    />
+
+    <div class="container">
+      <div
+        class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 overflow-hidden pb-5"
+        style="width: auto; height: auto; border-radius: 20px"
+      >
+        <div class="my-3 py-3">
+          <h2 class="display-5 text-center">Compra de bilhetes</h2>
+        </div>
+
+        <form id="formID" action="/tickets/save/<%= event.id %>" method="post">
+          <div
+            class="bg-body shadow-sm mx-auto pb-5"
+            style="width: auto; height: auto; border-radius: 20px"
+          >
+            <br />
+            <div class="row">
+              <div class="col-md-6">
+                <h3 style="margin-left: 1cm; margin-right: 1cm">
+                  <%= event.name %>
+                </h3>
+
+                <p id="startDate" style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>Horário de início:</strong>
+                </p>
+                <p id="endDate" style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>Horário de fim:</strong>
+                </p>
+                <br />
+                <% if (users.length != 0) { %>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>Vendedor: </strong>
+                  <select name="user_id" id="user_id">
+                    <% for (let i = 0; i < users.length; i++) { %>
+                    <option value="<%= users[i]._id %>">
+                      <%= users[i].name %>
+                    </option>
+                    <% } %>
+                  </select>
+                </p>
+                <% } else {%>
+                <div
+                  style="
+                    background-color: rgb(145, 0, 0);
+                    padding: 10px;
+                    display: flex;
+                    border-radius: 8px;
+                    align-items: center;
+                    margin-left: 1cm;
+                    margin-right: 4cm;
+                  "
+                >
+                  <p style="margin: 0; font-weight: bold; color: white">
+                    AVISO: Não existe funcionários para realizar a compra
+                  </p>
+                </div>
+                <% } %>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>NIF:</strong>
+                  <input
+                    id="nif"
+                    name="nif"
+                    min="100000000"
+                    max="999999999"
+                    type="text"
+                    maxlength="9"
+                    class="form-control"
+                    placeholder="NIF"
+                    aria-label="default input example"
+                  />
+                </p>
+
+                <table
+                  class="table"
+                  style="margin-left: 1cm; width: auto; height: auto"
+                >
+                  <thead>
+                    <tr>
+                      <th>Faixa etária</th>
+                      <th>Preço</th>
+                      <th>Quantidade</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-group-divider">
+                    <% if (event.priceInfantil != null) { %>
+                    <tr>
+                      <td>Infantil</td>
+                      <td>
+                        €
+                        <span id="priceInfantil"
+                          ><%= event.priceInfantil %></span
+                        >
+                      </td>
+                      <td>
+                        <input
+                          value="0"
+                          name="countInfantil"
+                          type="number"
+                          min="0"
+                          max="<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>"
+                          placeholder="0"
+                          id="countInfantil"
+                          onchange="verifyCountTicket('<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>'); updateTotalPrice()"
+                        />
+                      </td>
+                    </tr>
+                    <% } %><% if (event.priceJuvenil != null) { %>
+                    <tr>
+                      <td>Juvenil</td>
+                      <td>
+                        €
+                        <span id="priceJuvenil"><%= event.priceJuvenil %></span>
+                      </td>
+                      <td>
+                        <input
+                          value="0"
+                          name="countJuvenil"
+                          type="number"
+                          min="0"
+                          max="<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>"
+                          placeholder="0"
+                          id="countJuvenil"
+                          onchange="verifyCountTicket('<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>'); updateTotalPrice()"
+                        />
+                      </td>
+                    </tr>
+                    <% } %><% if (event.priceAdulto != null) { %>
+                    <tr>
+                      <td>Adulto</td>
+                      <td>
+                        € <span id="priceAdulto"><%= event.priceAdulto %></span>
+                      </td>
+                      <td>
+                        <input
+                          value="0"
+                          name="countAdulto"
+                          type="number"
+                          min="0"
+                          max="<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>"
+                          placeholder="0"
+                          id="countAdulto"
+                          onchange="verifyCountTicket('<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>'); updateTotalPrice()"
+                        />
+                      </td>
+                    </tr>
+                    <% } %> <% if (event.priceSenior != null) { %>
+                    <tr>
+                      <td>Sênior</td>
+                      <td>
+                        € <span id="priceSenior"><%= event.priceSenior %></span>
+                      </td>
+                      <td>
+                        <input
+                          value="0"
+                          name="countSenior"
+                          type="number"
+                          min="0"
+                          max="<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>"
+                          placeholder="0"
+                          id="countSenior"
+                          onchange="verifyCountTicket('<%= event.maxTickets - event.countInfantil - event.countJuvenil - event.countAdulto - event.countSenior %>'); updateTotalPrice()"
+                        />
+                      </td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <strong>Bilhetes disponíveis: </strong><%= event.maxTickets -
+                  event.countInfantil - event.countJuvenil - event.countAdulto -
+                  event.countSenior %>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <% if(event.image !== null) { %>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <img
+                    src="/images/<%= event.image %>"
+                    alt="Imagem do evento"
+                    class="img-fluid mb-4"
+                    style="
+                      width: auto;
+                      height: auto;
+                      border-radius: 20px;
+                      position: relative;
+                    "
+                  />
+                </p>
+                <br />
+                <% } else { %>
+                <p style="margin-left: 1cm; margin-right: 1cm">
+                  <img
+                    src="/images/EventoSemImagem.png"
+                    alt="Imagem do evento"
+                    class="img-fluid mb-4"
+                    style="
+                      width: auto;
+                      height: auto;
+                      border-radius: 20px;
+                      position: relative;
+                    "
+                  />
+                </p>
+                <br />
+                <% } %>
+              </div>
+              <br />
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <p style="margin-left: 1cm">
+                  <strong>Total: </strong><span id="totalPrice">0</span>€
+                </p>
+                <input
+                  type="hidden"
+                  name="totalPrice"
+                  value="0"
+                  id="totalPriceInput"
+                />
+                <p style="margin: 1cm">
+                  <% var hasAdmin = false; %> <% for (var i = 0; i <
+                  users.length; i++) { if (users[i].cargo === "ADMIN") {
+                  hasAdmin = true; } } %> <% if (hasAdmin) { %>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="openPopup()"
+                  >
+                    Comprar
+                  </button>
+                  <% } else {%>
+                  <button type="submit" class="btn btn-primary" disabled>
+                    Comprar
+                  </button>
+                  <% } %>
+                </p>
+              </div>
+              <br />
+            </div>
+          </div>
+          <br />
+
+          <!-- POPUP -->
+          <div
+            class="modal fade show"
+            id="modalDiscounts"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            style="display: none"
+            data-gtm-vis-first-on-screen-2340190_1302="22461"
+            data-gtm-vis-total-visible-time-2340190_1302="100"
+            data-gtm-vis-has-fired-2340190_1302="1"
+            aria-modal="true"
+            role="dialog"
+          >
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel">
+                    Descontos disponíveis
+                  </h4>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    onclick="closePopup()"
+                  >
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <!--Body-->
+                <div class="modal-body">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nº</th>
+                        <th>Desconto</th>
+                        <th>Pontos necessários</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>40%</td>
+                        <td>100pts</td>
+                        <td>
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="100"
+                            id="checkDiscount40"
+                          />
+                        </td>
+                        <td>
+                          <a>
+                            <i class="fas fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>25%</td>
+                        <td>60pts</td>
+                        <td>
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="60"
+                            id="checkDiscount25"
+                          />
+                        </td>
+                        <td>
+                          <a>
+                            <i class="fas fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>10%</td>
+                        <td>30pts</td>
+                        <td>
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="30"
+                            id="checkDiscount10"
+                          />
+                        </td>
+                        <td>
+                          <a>
+                            <i class="fas fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer">
+                  <p style="margin-left: 1cm; margin-right: 1cm">
+                    <input
+                      type="hidden"
+                      id="discountValue"
+                      name="discountValue"
+                      value="0"
+                    />
+                    <button type="submit" class="btn btn-primary">
+                      Comprar
+                    </button>
+                  </p>
+                  <strong>Pontos: </strong> <span id="userPoints"></span>pts
+                  <input
+                    type="hidden"
+                    name="userPoints"
+                    value="0"
+                    id="userPointsInput"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </form>
+
+        <br />
+        <p style="margin-left: 1cm; margin-right: 1cm">
+          <a href="/events" class="btn btn-primary">Voltar</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
